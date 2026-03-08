@@ -49,10 +49,22 @@ import { Profile } from '../../models/models';
       <!-- Profile Selection -->
       <section class="profiles-section">
         <h2 class="section-title animate-fadeInUp">Sélectionnez votre profil</h2>
+
+        <!-- Mode selector -->
+        <div class="mode-tabs animate-fadeInUp">
+          <button class="mode-tab" [class.active]="selectedMode === 'scripted'" (click)="selectedMode = 'scripted'">
+            📋 Questionnaire guidé
+            <span class="mode-desc">4 choix par question</span>
+          </button>
+          <button class="mode-tab" [class.active]="selectedMode === 'ai'" (click)="selectedMode = 'ai'">
+            🤖 Entretien IA
+            <span class="mode-desc">Conversation libre · Azure OpenAI</span>
+          </button>
+        </div>
+
         <div class="profiles-grid">
-          <a
+          <div
             *ngFor="let profile of profiles; let i = index"
-            [routerLink]="['/audit', profile.id]"
             class="profile-card glass-card"
             [style.animation-delay]="(i * 0.08) + 's'"
           >
@@ -69,12 +81,26 @@ import { Profile } from '../../models/models';
               <span *ngFor="let dim of profile.dimensions" class="dim-tag" [style.border-color]="profile.color + '30'">{{ dim }}</span>
             </div>
             <div class="card-footer">
-              <span class="card-link" [style.color]="profile.color">
-                Commencer l'audit
-                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
+              <!-- Scripted chatbot -->
+              <a *ngIf="selectedMode === 'scripted'"
+                 [routerLink]="['/chat', profile.id]"
+                 class="start-btn"
+                 [style.background]="profile.color + '18'"
+                 [style.border-color]="profile.color + '40'"
+                 [style.color]="profile.color">
+                📋 Démarrer le questionnaire
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <!-- AI conversational chatbot -->
+              <a *ngIf="selectedMode === 'ai'"
+                 [routerLink]="['/ai-chat', profile.id]"
+                 class="start-btn ai-start"
+                 [style.border-color]="profile.color + '40'">
+                🤖 Démarrer l'entretien IA
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
             </div>
-          </a>
+          </div>
         </div>
       </section>
 
@@ -188,6 +214,67 @@ import { Profile } from '../../models/models';
       flex-shrink: 0;
     }
 
+    /* Mode tabs */
+    .mode-tabs {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+    }
+    .mode-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.03);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .mode-tab:hover {
+      border-color: rgba(99,102,241,0.4);
+      background: rgba(99,102,241,0.06);
+      color: var(--text-primary);
+    }
+    .mode-tab.active {
+      border-color: rgba(99,102,241,0.6);
+      background: rgba(99,102,241,0.12);
+      color: #818cf8;
+    }
+    .mode-desc {
+      font-size: 0.72rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+
+    /* Start button inside card */
+    .start-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      border: 1px solid;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+    .start-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .ai-start {
+      background: rgba(99,102,241,0.12);
+      color: #818cf8;
+    }
+
     /* Profiles */
     .section-title {
       font-size: 1.4rem;
@@ -208,9 +295,7 @@ import { Profile } from '../../models/models';
       position: relative;
       padding: 28px;
       overflow: hidden;
-      cursor: pointer;
       animation: fadeInUp 0.5s ease-out both;
-      text-decoration: none;
     }
 
     .profile-card:hover {
@@ -284,18 +369,7 @@ import { Profile } from '../../models/models';
       color: var(--text-secondary);
     }
 
-    .card-footer { position: relative; }
-
-    .card-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .profile-card:hover .card-link { gap: 10px; }
+    .card-footer { position: relative; margin-top: 4px; }
 
     /* Maturity Levels */
     .levels-section { margin-bottom: 40px; }
@@ -340,6 +414,7 @@ import { Profile } from '../../models/models';
 })
 export class LandingComponent implements OnInit {
     profiles: Profile[] = [];
+    selectedMode: 'scripted' | 'ai' = 'scripted';
 
     maturityLevels = [
         { emoji: '🔴', label: 'Découverte', range: '0 – 25%', color: '#ef4444' },
