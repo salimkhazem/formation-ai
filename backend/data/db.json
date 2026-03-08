@@ -90,6 +90,59 @@
         ]
       },
       "created_at": "2026-02-10T20:37:59.682Z"
+    },
+    {
+      "id": "6eb4c073-72ca-4829-a7f8-144308ca129f",
+      "profileId": "expert-ia",
+      "respondentName": "Amar",
+      "respondentEmail": "amar.kh@gmail.com",
+      "answers": {
+        "gen-1": "Quotidiennement",
+        "gen-2": [
+          "ChatGPT (OpenAI)",
+          "Claude (Anthropic)",
+          "Gemini (Google)",
+          "GitHub Copilot"
+        ],
+        "gen-3": 8,
+        "gen-4": "Auto-formation (vidéos, articles)",
+        "gen-5": "Oui, des guidelines informelles",
+        "gen-6": "Moyennement",
+        "gen-7": "Significativement (25-50%)",
+        "gen-8": "Régulièrement",
+        "ei-1": 6,
+        "ei-2": "Mise en œuvre professionnelle",
+        "ei-3": "Oui, en production",
+        "ei-4": "Bonne compréhension",
+        "ei-5": "Régulièrement",
+        "ei-6": 9
+      },
+      "scores": {
+        "overall": 66,
+        "level": "adoption",
+        "levelLabel": "Adoption",
+        "levelColor": "#eab308",
+        "levelEmoji": "🟡",
+        "dimensions": {
+          "Utilisation": 75,
+          "Connaissance": 69,
+          "Formation": 25,
+          "Gouvernance": 50,
+          "Éthique": 50,
+          "Impact": 75,
+          "Partage": 75,
+          "Prompt Engineering": 54,
+          "Fine-tuning": 75,
+          "Architecture": 82
+        },
+        "recommendations": [
+          "Explorez des techniques avancées (chain-of-thought, few-shot learning)",
+          "Contribuez à la définition de la stratégie IA de votre entreprise",
+          "Mesurez et documentez les gains de productivité obtenus",
+          "Concentrez vos efforts sur la dimension \"Formation\" (score actuel : 25%)"
+        ]
+      },
+      "created_at": "2026-03-08T02:12:01.347Z"
     }
   ]
 }
