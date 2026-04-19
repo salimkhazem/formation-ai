@@ -22,8 +22,25 @@ const PROFILE_ICONS: Record<string, string> = {
         <div class="container">
             <div class="page-header">
                 <a routerLink="/" class="back-link">← Accueil</a>
-                <h1>Mes évaluations</h1>
-                <p class="subtitle">{{ auth.currentUser?.name || auth.currentUser?.email }}</p>
+                <div class="header-row">
+                    <div>
+                        <h1>Mes évaluations</h1>
+                        <p class="subtitle">{{ auth.currentUser?.name || auth.currentUser?.email }}</p>
+                    </div>
+                    <div class="header-btns">
+                        <a *ngIf="audits.length > 0"
+                           [href]="allAuditsPdfUrl()"
+                           class="btn btn-secondary btn-sm"
+                           target="_blank">
+                            📥 Rapport complet
+                        </a>
+                        <a *ngIf="auth.isManager"
+                           routerLink="/manager/export"
+                           class="btn btn-primary btn-sm">
+                            📊 Export projet
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <div *ngIf="loading" class="loading">Chargement...</div>
@@ -101,7 +118,7 @@ const PROFILE_ICONS: Record<string, string> = {
                     </div>
 
                     <div class="card-actions">
-                        <a [href]="pdfUrl(audit.id)" class="btn btn-secondary btn-sm" target="_blank">📄 PDF</a>
+                        <a [href]="pdfUrl(audit.id)" class="btn btn-secondary btn-sm" target="_blank">📄 PDF cette session</a>
                         <a routerLink="/" class="btn btn-primary btn-sm">Nouvelle évaluation</a>
                     </div>
                 </div>
@@ -111,6 +128,8 @@ const PROFILE_ICONS: Record<string, string> = {
     styles: [`
         .container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
         .page-header { margin-bottom: 28px; }
+        .header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .header-btns { display: flex; gap: 8px; flex-wrap: wrap; }
         .back-link { display: block; color: var(--text-secondary); font-size: 0.875rem; margin-bottom: 8px; }
         .back-link:hover { color: var(--text-primary); }
         h1 { font-size: 1.75rem; font-weight: 800; margin: 0; }
@@ -201,6 +220,12 @@ export class UserResultsComponent implements OnInit {
     }
 
     pdfUrl(auditId: string): string {
-        return `http://localhost:3000/api/export/pdf?auditId=${auditId}`;
+        const token = localStorage.getItem('auth_token') || '';
+        return `http://localhost:3000/api/export/pdf?auditId=${auditId}&token=${token}`;
+    }
+
+    allAuditsPdfUrl(): string {
+        const token = localStorage.getItem('auth_token') || '';
+        return `http://localhost:3000/api/export/pdf/user?token=${token}`;
     }
 }

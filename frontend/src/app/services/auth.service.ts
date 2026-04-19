@@ -7,7 +7,7 @@ export interface AuthUser {
     id: string;
     email: string;
     name: string;
-    role: 'admin' | 'user';
+    role: 'admin' | 'manager' | 'user';
     company_id: string;
     company_name: string;
 }
@@ -45,6 +45,10 @@ export class AuthService {
 
     get isAdmin(): boolean {
         return this.currentUser?.role === 'admin';
+    }
+
+    get isManager(): boolean {
+        return this.currentUser?.role === 'admin' || this.currentUser?.role === 'manager';
     }
 
     login(email: string, password: string): Observable<LoginResponse> {

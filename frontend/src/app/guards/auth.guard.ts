@@ -26,6 +26,21 @@ export const adminGuard: CanActivateFn = (route, state) => {
     return true;
 };
 
+export const managerGuard: CanActivateFn = (route, state) => {
+    const auth = inject(AuthService);
+    const router = inject(Router);
+
+    if (!auth.isLoggedIn) {
+        router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
+        return false;
+    }
+    if (!auth.isManager) {
+        router.navigate(['/']);
+        return false;
+    }
+    return true;
+};
+
 export const guestGuard: CanActivateFn = () => {
     const auth = inject(AuthService);
     const router = inject(Router);

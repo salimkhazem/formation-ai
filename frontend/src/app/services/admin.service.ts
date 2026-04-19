@@ -69,8 +69,24 @@ export class AdminService {
     }
 
     // Export
-    getExcelExportUrl(companyId: string): string {
-        return `${this.apiUrl}/export/excel?companyId=${companyId}`;
+    getExcelExportUrl(companyId: string, profileId?: string): string {
+        const profile = profileId ? `&profileId=${profileId}` : '';
+        return `${this.apiUrl}/export/excel?companyId=${companyId}${profile}`;
+    }
+
+    getCompanyPdfUrl(companyId: string, profileId?: string): string {
+        const profile = profileId ? `&profileId=${profileId}` : '';
+        return `${this.apiUrl}/export/pdf/company?companyId=${companyId}${profile}`;
+    }
+
+    getManagerExcelUrl(profileId?: string): string {
+        const profile = profileId ? `?profileId=${profileId}` : '';
+        return `${this.apiUrl}/export/excel${profile}`;
+    }
+
+    getManagerPdfUrl(profileId?: string): string {
+        const profile = profileId ? `?profileId=${profileId}` : '';
+        return `${this.apiUrl}/export/pdf/company${profile}`;
     }
 
     getPdfExportUrl(auditId: string): string {

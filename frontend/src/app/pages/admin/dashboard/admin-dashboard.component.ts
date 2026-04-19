@@ -17,6 +17,7 @@ import { AdminService } from '../../../services/admin.service';
                 </div>
                 <div class="header-actions">
                     <a routerLink="/admin/team" class="btn btn-secondary">👥 Équipe</a>
+                    <a [href]="companyPdfUrl()" class="btn btn-secondary" target="_blank">📥 PDF équipe</a>
                     <a routerLink="/admin/export" class="btn btn-primary">📊 Exporter</a>
                 </div>
             </div>
@@ -94,8 +95,9 @@ import { AdminService } from '../../../services/admin.service';
                                     <span class="level-badge">{{ audit.scores?.levelEmoji }} {{ audit.scores?.levelLabel }}</span>
                                 </td>
                                 <td class="date">{{ audit.created_at | date:'dd/MM/yyyy' }}</td>
-                                <td>
-                                    <a [href]="getPdfUrl(audit.id)" class="btn-icon" title="Télécharger PDF" target="_blank">📄</a>
+                                <td class="actions-cell">
+                                    <a [href]="getPdfUrl(audit.id)" class="btn-icon" title="PDF de cette évaluation" target="_blank">📄</a>
+                                    <a [href]="getUserPdfUrl(audit.user_id)" class="btn-icon" title="Toutes les évaluations de cet utilisateur" target="_blank">👤</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -142,7 +144,9 @@ import { AdminService } from '../../../services/admin.service';
         .score-badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.875rem; color: white; }
         .level-badge { font-size: 0.85rem; }
         .date { color: var(--text-secondary); font-size: 0.875rem; }
-        .btn-icon { font-size: 1.2rem; cursor: pointer; }
+        .actions-cell { display: flex; gap: 6px; align-items: center; }
+        .btn-icon { font-size: 1.2rem; cursor: pointer; text-decoration: none; padding: 4px; border-radius: 6px; }
+        .btn-icon:hover { background: rgba(255,255,255,0.08); }
     `]
 })
 export class AdminDashboardComponent implements OnInit {
@@ -194,6 +198,18 @@ export class AdminDashboardComponent implements OnInit {
     }
 
     getPdfUrl(auditId: string): string {
-        return `http://localhost:3000/api/export/pdf?auditId=${auditId}`;
+        const token = localStorage.getItem('auth_token') || '';
+        return `http://localhost:3000/api/export/pdf?auditId=${auditId}&token=${token}`;
+    }
+
+    getUserPdfUrl(userId: string): string {
+        const token = localStorage.getItem('auth_token') || '';
+        return `http://localhost:3000/api/export/pdf/user?userId=${userId}&token=${token}`;
+    }
+
+    companyPdfUrl(): string {
+        const token = localStorage.getItem('auth_token') || '';
+        const companyId = this.auth.currentUser?.company_id || '';
+        return `http://localhost:3000/api/export/pdf/company?companyId=${companyId}&token=${token}`;
     }
 }

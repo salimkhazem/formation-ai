@@ -72,6 +72,7 @@ app.use('/api/questions', require('./questions/questions.routes'));
 app.use('/api/chatbot', require('./chatbot/chatbot.routes'));
 app.use('/api/export', require('./export/export.routes'));
 app.use('/api/ai-chat', require('./ai-chat/ai-chat.routes'));
+app.use('/api/transcribe', require('./transcribe/transcribe.routes'));
 
 // ── Health check ──────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

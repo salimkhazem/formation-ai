@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
   company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
   email TEXT UNIQUE NOT NULL,
   name TEXT,
-  role TEXT DEFAULT 'user' CHECK (role IN ('admin', 'user')),
+  role TEXT DEFAULT 'user' CHECK (role IN ('admin', 'manager', 'user')),
   password_hash TEXT,
   invitation_token TEXT,
   status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'active')),

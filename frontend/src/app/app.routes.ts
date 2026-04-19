@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, adminGuard, guestGuard } from './guards/auth.guard';
+import { authGuard, adminGuard, managerGuard, guestGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     // Public
@@ -50,6 +50,13 @@ export const routes: Routes = [
         path: 'user/results',
         canActivate: [authGuard],
         loadComponent: () => import('./pages/user-results/user-results.component').then(m => m.UserResultsComponent)
+    },
+
+    // Manager area
+    {
+        path: 'manager/export',
+        canActivate: [managerGuard],
+        loadComponent: () => import('./pages/manager/export/manager-export.component').then(m => m.ManagerExportComponent)
     },
 
     // Admin area

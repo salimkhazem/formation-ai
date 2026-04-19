@@ -13,6 +13,7 @@ const AXES = {
 
 // ── Modules de formation suggérés par axe ────────────────────────────
 const MODULES = {
+    'debutant-ia':  { name: 'Initiation à l\'IA Générative',    duration: '3h',   level: 'Débutant'       },
     utilisation:    { name: 'Découverte des outils IA',         duration: '2h',   level: 'Débutant'       },
     prompting:      { name: 'Prompt Engineering fondamentaux',  duration: '4h',   level: 'Intermédiaire'  },
     ethique:        { name: 'IA Responsable & Éthique',         duration: '3h',   level: 'Tous niveaux'   },
@@ -24,6 +25,7 @@ const MODULES = {
 
 // ── Profils disponibles ───────────────────────────────────────────────
 const PROFILES = {
+    'debutant-ia':      { name: 'Débutant IA',      icon: '🌱', color: '#10b981' },
     'developpeur':      { name: 'Développeur',      icon: '💻', color: '#14b8a6' },
     'business-analyst': { name: 'Business Analyst', icon: '📊', color: '#8b5cf6' },
     'manager':          { name: 'Manager',           icon: '👥', color: '#ec4899' },

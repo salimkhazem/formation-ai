@@ -3,13 +3,17 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = process.env.JWT_SECRET || 'ai-maturity-secret-change-in-prod';
 
 function requireAuth(req, res, next) {
+    // Accept token from Authorization header OR query param (for direct file downloads)
     const header = req.headers.authorization;
-    if (!header || !header.startsWith('Bearer ')) {
+    const rawToken = (header && header.startsWith('Bearer '))
+        ? header.slice(7)
+        : req.query.token;
+
+    if (!rawToken) {
         return res.status(401).json({ error: 'Token manquant' });
     }
-    const token = header.slice(7);
     try {
-        const payload = jwt.verify(token, JWT_SECRET);
+        const payload = jwt.verify(rawToken, JWT_SECRET);
         req.user = payload;
         next();
     } catch {
@@ -21,6 +25,15 @@ function requireAdmin(req, res, next) {
     requireAuth(req, res, () => {
         if (req.user.role !== 'admin') {
             return res.status(403).json({ error: 'Accès réservé aux administrateurs' });
+        }
+        next();
+    });
+}
+
+function requireManager(req, res, next) {
+    requireAuth(req, res, () => {
+        if (req.user.role !== 'admin' && req.user.role !== 'manager') {
+            return res.status(403).json({ error: 'Accès réservé aux managers et administrateurs' });
         }
         next();
     });
@@ -38,4 +51,4 @@ function verifyRefreshToken(token) {
     return jwt.verify(token, JWT_SECRET + '_refresh');
 }
 
-module.exports = { requireAuth, requireAdmin, signToken, signRefreshToken, verifyRefreshToken };
+module.exports = { requireAuth, requireAdmin, requireManager, signToken, signRefreshToken, verifyRefreshToken };

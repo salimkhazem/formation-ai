@@ -3,6 +3,7 @@ const url = require('url');
 const pool = require('../db/pool');
 
 const PROFILES = {
+    'debutant-ia':      { name: 'Débutant IA',      icon: '🌱', color: '#10b981' },
     'developpeur':      { name: 'Développeur',      icon: '💻', color: '#14b8a6' },
     'business-analyst': { name: 'Business Analyst', icon: '📊', color: '#8b5cf6' },
     'manager':          { name: 'Manager',           icon: '👥', color: '#ec4899' },

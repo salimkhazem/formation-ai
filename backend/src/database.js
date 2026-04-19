@@ -13,6 +13,14 @@ if (!fs.existsSync(dataDir)) {
 
 const PROFILES = [
     {
+        id: 'debutant-ia',
+        name: 'Débutant IA',
+        description: 'Découvrez votre niveau de départ et commencez votre parcours de montée en compétences IA',
+        icon: '🌱',
+        color: '#10b981',
+        dimensions: ['Compétences de base', 'Posture', 'Éthique', 'Usages']
+    },
+    {
         id: 'developpeur',
         name: 'Développeur',
         description: 'Évaluez votre niveau de maturité dans l\'utilisation de l\'IA pour le développement logiciel',

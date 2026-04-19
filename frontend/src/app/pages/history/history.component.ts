@@ -20,26 +20,30 @@ import { Audit } from '../../models/models';
 
       <!-- Audits List -->
       <div class="audit-list" *ngIf="audits.length > 0">
-        <a
+        <div
           *ngFor="let a of audits; let i = index"
-          [routerLink]="['/results', a.id]"
           class="audit-row glass-card"
           [style.animation-delay]="(i * 0.05) + 's'"
         >
-          <span class="audit-icon" [style.background]="a.profileColor + '20'">{{ a.profileIcon }}</span>
-          <div class="audit-info">
-            <h3>{{ a.respondentName || 'Anonyme' }}</h3>
-            <span class="audit-meta">{{ a.profileName }} · {{ formatDate(a.created_at) }}</span>
-          </div>
-          <div class="audit-score">
-            <span class="score-emoji">{{ a.scores.levelEmoji }}</span>
-            <div>
-              <span class="score-value" [style.color]="a.scores.levelColor">{{ a.scores.overall }}%</span>
-              <span class="score-level">{{ a.scores.levelLabel }}</span>
+          <a [routerLink]="['/results', a.id]" class="audit-row-link">
+            <span class="audit-icon" [style.background]="a.profileColor + '20'">{{ a.profileIcon }}</span>
+            <div class="audit-info">
+              <h3>{{ a.respondentName || 'Anonyme' }}</h3>
+              <span class="audit-meta">{{ a.profileName }} · {{ formatDate(a.created_at) }}</span>
             </div>
+            <div class="audit-score">
+              <span class="score-emoji">{{ a.scores.levelEmoji }}</span>
+              <div>
+                <span class="score-value" [style.color]="a.scores.levelColor">{{ a.scores.overall }}%</span>
+                <span class="score-level">{{ a.scores.levelLabel }}</span>
+              </div>
+            </div>
+          </a>
+          <div class="row-actions">
+            <a [href]="pdfUrl(a.id)" class="btn-icon-action" title="Télécharger PDF" target="_blank">📄</a>
+            <button class="btn-icon-action btn-danger-icon" (click)="deleteAudit($event, a)" title="Supprimer">🗑️</button>
           </div>
-          <button class="btn btn-danger btn-icon" (click)="deleteAudit($event, a)" title="Supprimer">🗑️</button>
-        </a>
+        </div>
       </div>
 
       <!-- Empty State -->
@@ -81,15 +85,45 @@ import { Audit } from '../../models/models';
     .audit-row {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 20px 24px;
-      text-decoration: none;
+      gap: 12px;
+      padding: 16px 20px;
       animation: fadeInUp 0.3s ease-out both;
     }
 
     .audit-row:hover {
       transform: translateX(4px);
     }
+
+    .audit-row-link {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .row-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .btn-icon-action {
+      font-size: 1.1rem;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255,255,255,0.06);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .btn-icon-action:hover { background: rgba(255,255,255,0.12); }
+    .btn-danger-icon:hover { background: rgba(239,68,68,0.15); }
 
     .audit-icon {
       width: 44px;
@@ -166,6 +200,10 @@ export class HistoryComponent implements OnInit {
                 this.audits = this.audits.filter(a => a.id !== audit.id);
             });
         }
+    }
+
+    pdfUrl(auditId: string): string {
+        return `http://localhost:3000/api/export/pdf/legacy?auditId=${auditId}`;
     }
 
     formatDate(dateStr: string): string {
